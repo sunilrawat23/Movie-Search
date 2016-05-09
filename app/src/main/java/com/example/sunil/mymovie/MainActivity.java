@@ -150,7 +150,7 @@ btn.setOnClickListener(new View.OnClickListener() {
 
                             Picasso.with(getBaseContext()).load(poster).into(img_poster);
 
-                            System.out.println("hjasghjdgasjgdkasgkdsad"+title+""+poster);
+                            System.out.println("Title "+title+" Poster"+poster);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
