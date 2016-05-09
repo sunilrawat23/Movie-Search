@@ -61,7 +61,9 @@ public class MainActivity extends AppCompatActivity {
         txt_country=(TextView) findViewById(R.id.txt_country);
         txt_award=(TextView) findViewById(R.id.txt_award);
 
+
         linearLayout=(LinearLayout)findViewById(R.id.layout_result);
+
 
         PrefUtils.saveToPrefs(
                         getApplicationContext(),
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                         PrefUtils.PREFS_COMPETITION_KEY, year);
 
         mSignUpAsync = new SignUpAsync();
+        linearLayout.setVisibility(View.VISIBLE);
         mSignUpAsync.execute(Constant.TXT_BLANK);
         ed1.setText("");
         ed2.setText("");
@@ -149,6 +152,9 @@ public class MainActivity extends AppCompatActivity {
                             Picasso.with(getBaseContext()).load(poster).into(img_poster);
 
                             System.out.println("Title "+title+" Poster"+poster);
+
+                           /* linearLayout=(LinearLayout)findViewById(R.id.layout_result);
+                            linearLayout.getVisibility(View.VISIBLE);*/
 
                         } catch (JSONException e) {
                             e.printStackTrace();
