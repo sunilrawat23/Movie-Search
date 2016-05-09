@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     Button btn;
     EditText ed1,ed2;
     TextView txt_title,txt_year,txt_released,txt_genre,txt_director,txt_actors,txt_plot,txt_country,txt_award;
+    LinearLayout linearLayout;
     ImageView img_poster;
 
     @Override
@@ -42,7 +44,8 @@ public class MainActivity extends AppCompatActivity {
         btn=(Button)findViewById(R.id.show);
         ed1=(EditText)findViewById(R.id.moviename);
         ed2=(EditText)findViewById(R.id.year);
-btn.setOnClickListener(new View.OnClickListener() {
+
+        btn.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
         String name=ed1.getText().toString();
@@ -58,16 +61,14 @@ btn.setOnClickListener(new View.OnClickListener() {
         txt_country=(TextView) findViewById(R.id.txt_country);
         txt_award=(TextView) findViewById(R.id.txt_award);
 
-        PrefUtils
-                .saveToPrefs(
+        linearLayout=(LinearLayout)findViewById(R.id.layout_result);
+
+        PrefUtils.saveToPrefs(
                         getApplicationContext(),
-                        PrefUtils.PREFS_LOGIN_PRIVACY_KEY,
-                        name);
-        PrefUtils
-                .saveToPrefs(
+                        PrefUtils.PREFS_LOGIN_PRIVACY_KEY, name);
+        PrefUtils.saveToPrefs(
                         getApplicationContext(),
-                        PrefUtils.PREFS_COMPETITION_KEY,
-                        year);
+                        PrefUtils.PREFS_COMPETITION_KEY, year);
 
         mSignUpAsync = new SignUpAsync();
         mSignUpAsync.execute(Constant.TXT_BLANK);
@@ -92,8 +93,6 @@ btn.setOnClickListener(new View.OnClickListener() {
                 dialog.setCancelable(false);
                 dialog.show();
 
-
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -103,7 +102,6 @@ btn.setOnClickListener(new View.OnClickListener() {
         protected String doInBackground(String... params) {
 
             response = CallSignUpService();
-
             return response;
         }
 
