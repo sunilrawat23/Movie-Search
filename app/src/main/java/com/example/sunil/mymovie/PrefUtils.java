@@ -10,7 +10,7 @@ public class PrefUtils {
 	public static final String PREFS_LOGIN_PRIVACY_KEY = "PRIVACY";
 	public static final String PREFS_COMPETITION_KEY = "COMPATITION";
 
-
+//
 	public static void saveToPrefs(Context context, String key, String value) {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
