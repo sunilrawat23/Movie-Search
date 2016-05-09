@@ -12,6 +12,7 @@ import org.apache.http.params.HttpParams;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -36,34 +37,7 @@ public class HttpClientWritten {
 		this.url = url;
 		this.context = context;
 	}
-	
-	public byte[] downloadImage(String imgName) {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		try {
-			System.out.println("URL ["+url+"] - Name ["+imgName+"]");
-			
-			HttpURLConnection con = (HttpURLConnection) ( new URL(url)).openConnection();
-			con.setRequestMethod("POST");
-			
-			con.setDoInput(true);
-			con.setDoOutput(true);
-			con.connect();
-			con.getOutputStream().write( ("name=" + imgName).getBytes());
-			
-			InputStream is = con.getInputStream();
-			byte[] b = new byte[1024];
-			
-			while ( is.read(b) != -1)
-				baos.write(b);
-			
-			con.disconnect();
-		}
-		catch(Throwable t) {
-			t.printStackTrace();
-		}
-		
-		return baos.toByteArray();
-	}
+
 
 	public void connectForMultipart() throws Exception {
 		con = (HttpURLConnection) ( new URL(url)).openConnection();
@@ -83,21 +57,7 @@ public class HttpClientWritten {
 		os = con.getOutputStream();
 	}
 	
-	public void addFormPart(String paramName, String value) throws Exception {
-		writeParamData(paramName, value);
-	}
-	
-	public void addFilePart(String paramName, String fileName, byte[] data) throws Exception {
-		os.write( (delimiter + boundary + "\r\n").getBytes());
-		os.write( ("Content-Disposition: form-data; name=\"" + paramName +  "\"; filename=\"" + fileName + "\"\r\n"  ).getBytes());
-		os.write( ("Content-Type: application/octet-stream\r\n"  ).getBytes());
-		os.write( ("Content-Transfer-Encoding: binary\r\n"  ).getBytes());
-		os.write("\r\n".getBytes());
-   
-		os.write(data);
-		
-		os.write("\r\n".getBytes());
-	}
+
 	
 	public void finishMultipart() throws Exception {
 		os.write( (delimiter + boundary + delimiter + "\r\n").getBytes());
@@ -107,49 +67,22 @@ public class HttpClientWritten {
 	public String getResponse() throws Exception {
 		
 		String responseData = null;
+
 		try {
 			StringBuilder stringBuilder = new StringBuilder();
 
-			BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));                
-			String line = null; 
-			while ((line = reader.readLine())!= null) {       
-				stringBuilder.append(line);
-			}                 			
+			BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+			String line = null;
+			while ((line = reader.readLine())!= null) {
+                stringBuilder.append(line);
+            }
 			responseData = stringBuilder.toString();
 			con.disconnect();
-		}catch (ConnectTimeoutException e) {
-			e.printStackTrace();
 
-		
-	    }catch (SocketTimeoutException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
-
-
-		}catch (UnknownHostException e) {
-			e.printStackTrace();
-
-		
-		}catch (SocketException e) {
-			e.printStackTrace();
-
-	
-		}catch(Exception e){
-			e.printStackTrace();
-				
 		}
-		return responseData;
-	}
-	
 
-	
-	private void writeParamData(String paramName, String value) throws Exception {
-		
-		
-		os.write( (delimiter + boundary + "\r\n").getBytes());
-		os.write( "Content-Type: text/plain\r\n".getBytes());
-		os.write( ("Content-Disposition: form-data; name=\"" + paramName + "\"\r\n").getBytes());;
-		os.write( ("\r\n" + value + "\r\n").getBytes());
-			
-		
+		return responseData;
 	}
 }
