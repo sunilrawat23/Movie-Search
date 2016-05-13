@@ -190,13 +190,10 @@ public class MainActivity extends AppCompatActivity {
                     .getFromPrefs(MainActivity.this,
                             PrefUtils.PREFS_COMPETITION_KEY, null)
                     .toString().trim();
-            String plot="short";
-            String k="json";
-            String ss="http://www.omdbapi.com/?t=";
-            String url=ss+name;
-            String p=url+"&y="+year;
-            String m=p+"&plot="+plot;
-            String finalurl=m+"&r="+k;
+
+            String last="&plot=short&r=json";
+            String first="http://www.omdbapi.com/?t=";
+            String finalurl=first+name+"&y="+year+last;
             try {
 
                 HttpClientWritten client = new HttpClientWritten(finalurl,
